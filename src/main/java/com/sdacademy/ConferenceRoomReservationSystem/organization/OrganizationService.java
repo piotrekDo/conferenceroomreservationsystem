@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class OrganizationService {
@@ -33,8 +32,8 @@ public class OrganizationService {
     }
 
     OrganizationEntity deleteOrganization(String name) {
-        OrganizationEntity organization = organizationRepository.findByName(name).orElseThrow(() -> new NoSuchElementException(""));
-        organizationRepository.findByName(name);
+        OrganizationEntity organization = organizationRepository.findById(name).orElseThrow(() -> new NoSuchElementException(""));
+        organizationRepository.delete(organization);
         return organization;
     }
 
