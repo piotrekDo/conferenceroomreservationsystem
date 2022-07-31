@@ -37,6 +37,15 @@ public class OrganizationEntity {
     }
 
     @Override
+    public String toString() {
+        return "OrganizationEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof OrganizationEntity)) return false;

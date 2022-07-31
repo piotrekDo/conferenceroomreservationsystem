@@ -32,7 +32,7 @@ public class OrganizationService {
     }
 
     OrganizationEntity deleteOrganization(String name) {
-        OrganizationEntity organization = organizationRepository.findById(name).orElseThrow(() -> new NoSuchElementException(""));
+        OrganizationEntity organization = organizationRepository.findByName(name).orElseThrow(() -> new NoSuchElementException(""));
         organizationRepository.delete(organization);
         return organization;
     }

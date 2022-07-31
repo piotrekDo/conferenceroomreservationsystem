@@ -35,7 +35,7 @@ class OrganizationRepositoryTest {
         organizationRepository.save(test_organization1);
 
         //then
-        assertEquals(test_organization1, testEntityManager.find(OrganizationEntity.class, "Test organization1"));
+        assertEquals(test_organization1, testEntityManager.find(OrganizationEntity.class, 1L));
     }
 
     @Test
@@ -45,7 +45,7 @@ class OrganizationRepositoryTest {
         testEntityManager.persist(test_organization1);
 
         //when
-        OrganizationEntity result = organizationRepository.findById("Test organization1").orElseThrow();
+        OrganizationEntity result = organizationRepository.findByName("Test organization1").orElseThrow();
 
         //then
         assertEquals(test_organization1, result);
@@ -57,7 +57,7 @@ class OrganizationRepositoryTest {
         //given
         source.forEach(testEntityManager::persist);
 
-        Optional<OrganizationEntity> result = organizationRepository.findById(find);
+        Optional<OrganizationEntity> result = organizationRepository.findByName(find);
 
         assertEquals(expected, result);
     }
@@ -65,7 +65,7 @@ class OrganizationRepositoryTest {
     @Test
     void should_throw_an_exception_if_no_organization_found() {
         //when + then
-        assertThrows(NoSuchElementException.class, () -> organizationRepository.findById("Test organization").orElseThrow());
+        assertThrows(NoSuchElementException.class, () -> organizationRepository.findByName("Test organization").orElseThrow());
     }
 
     @Test
@@ -101,8 +101,8 @@ class OrganizationRepositoryTest {
         organizationRepository.delete(input.get(0));
 
         //then
-        assertNull(testEntityManager.find(OrganizationEntity.class, "Test organization1"));
-        assertEquals(input.get(1), testEntityManager.find(OrganizationEntity.class, "Test organization12"));
+        assertNull(testEntityManager.find(OrganizationEntity.class, 1L));
+        assertEquals(input.get(1), testEntityManager.find(OrganizationEntity.class, 2L));
     }
 
     @ParameterizedTest

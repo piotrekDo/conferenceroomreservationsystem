@@ -23,20 +23,20 @@ public class OrganizationsProvider implements ArgumentsProvider {
                                 new OrganizationEntity("Test organization2", "Test desc 2"),
                                 new OrganizationEntity("Test organization3", "Test desc 3")
                         ), List.of(
-                                new OrganizationEntity("Test organization1", "Test desc"),
-                                new OrganizationEntity("Test organization11", "Test desc"),
-                                new OrganizationEntity("Test organization12", "Test desc"),
-                                new OrganizationEntity("Test organization2", "Test desc 2"),
-                                new OrganizationEntity("Test organization3", "Test desc 3"),
-                                new OrganizationEntity("Test organization9", "Test desc")
+                                new OrganizationEntity(1L, "Test organization1", "Test desc"),
+                                new OrganizationEntity(3L, "Test organization11", "Test desc"),
+                                new OrganizationEntity(2L, "Test organization12", "Test desc"),
+                                new OrganizationEntity(5L, "Test organization2", "Test desc 2"),
+                                new OrganizationEntity(6L, "Test organization3", "Test desc 3"),
+                                new OrganizationEntity(4L, "Test organization9", "Test desc")
                         ),
                         List.of(
-                                new OrganizationEntity("Test organization9", "Test desc"),
-                                new OrganizationEntity("Test organization3", "Test desc 3"),
-                                new OrganizationEntity("Test organization2", "Test desc 2"),
-                                new OrganizationEntity("Test organization12", "Test desc"),
-                                new OrganizationEntity("Test organization11", "Test desc"),
-                                new OrganizationEntity("Test organization1", "Test desc")
+                                new OrganizationEntity(4L, "Test organization9", "Test desc"),
+                                new OrganizationEntity(6L, "Test organization3", "Test desc 3"),
+                                new OrganizationEntity(5L, "Test organization2", "Test desc 2"),
+                                new OrganizationEntity(2L, "Test organization12", "Test desc"),
+                                new OrganizationEntity(3L, "Test organization11", "Test desc"),
+                                new OrganizationEntity(1L, "Test organization1", "Test desc")
                         )
                 )
         );

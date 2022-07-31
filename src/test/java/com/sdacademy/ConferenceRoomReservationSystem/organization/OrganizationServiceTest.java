@@ -100,7 +100,7 @@ class OrganizationServiceTest {
     void should_add_an_organization() {
         //given
         OrganizationEntity test_organization1 = new OrganizationEntity("Test organization1", "Test Desc");
-        Mockito.when(organizationRepository.findById(test_organization1.getName())).thenReturn(Optional.empty());
+        Mockito.when(organizationRepository.findByName(test_organization1.getName())).thenReturn(Optional.empty());
         Mockito.when(organizationRepository.save(test_organization1)).thenReturn(test_organization1);
 
         //when
@@ -115,7 +115,7 @@ class OrganizationServiceTest {
     void should_throw_an_exception_when_adding_existing_organization() {
         //given
         OrganizationEntity test_organization1 = new OrganizationEntity("Test organization1", "Test Desc");
-        Mockito.when(organizationRepository.findById(test_organization1.getName())).thenReturn(Optional.of(test_organization1));
+        Mockito.when(organizationRepository.findByName(test_organization1.getName())).thenReturn(Optional.of(test_organization1));
 
         //when
         //then
@@ -129,7 +129,7 @@ class OrganizationServiceTest {
     void when_delete_organization_which_not_exist_in_repo_then_exception_should_be_thrown() {
         //given
         String id = "test";
-        Mockito.when(organizationRepository.findById(id)).thenReturn(Optional.empty());
+        Mockito.when(organizationRepository.findByName(id)).thenReturn(Optional.empty());
 
         //when
         //then
@@ -144,7 +144,7 @@ class OrganizationServiceTest {
         //given
         String id = "test";
         OrganizationEntity test_organization1 = new OrganizationEntity("Test organization1", "Test Desc");
-        Mockito.when(organizationRepository.findById(id)).thenReturn(Optional.of(test_organization1));
+        Mockito.when(organizationRepository.findByName(id)).thenReturn(Optional.of(test_organization1));
 
         //when
         OrganizationEntity result = organizationService.deleteOrganization(id);
@@ -159,7 +159,7 @@ class OrganizationServiceTest {
         //given
         String id = "Test organization1";
         OrganizationEntity test_organization1 = new OrganizationEntity("Test organization1", "Test Desc");
-        Mockito.when(organizationRepository.findById("Test organization1")).thenReturn(Optional.empty());
+        Mockito.when(organizationRepository.findByName("Test organization1")).thenReturn(Optional.empty());
 
         //when
         //then
@@ -174,7 +174,7 @@ class OrganizationServiceTest {
     void when_update_existing_organization_then_should_be_updated(String id, OrganizationEntity foundById,
                                                                   OrganizationEntity provided, OrganizationEntity expected) {
         //given
-        Mockito.when(organizationRepository.findById(id)).thenReturn(Optional.of(foundById));
+        Mockito.when(organizationRepository.findByName(id)).thenReturn(Optional.of(foundById));
         Mockito.when(organizationRepository.save(foundById)).thenReturn(expected);
 
         //when

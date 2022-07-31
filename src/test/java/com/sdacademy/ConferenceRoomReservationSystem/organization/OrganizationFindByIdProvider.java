@@ -23,7 +23,7 @@ public class OrganizationFindByIdProvider implements ArgumentsProvider {
                                 new OrganizationEntity("Test organization3", "Test desc 3")
                         ),
                         "Test organization12",
-                        Optional.of(new OrganizationEntity("Test organization12", "Test desc"))
+                        Optional.of(new OrganizationEntity(2L, "Test organization12", "Test desc"))
                 ), Arguments.of(
                         Collections.emptyList(),
                         "Test organization12",
