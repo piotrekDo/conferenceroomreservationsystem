@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class OrganizationController {
     }
 
     @PutMapping("/{name}")
-    OrganizationEntity update(@PathVariable String name, @Validated(value = OrganizationEntity.class) @RequestBody OrganizationEntity organization) {
+    OrganizationEntity update(@PathVariable String name, @Validated(value = UpdateOrganization.class) @RequestBody OrganizationEntity organization) {
         return organizationService.updateOrganization(name, organization);
     }
 
