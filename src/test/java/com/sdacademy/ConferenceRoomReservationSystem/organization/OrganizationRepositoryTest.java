@@ -27,7 +27,7 @@ class OrganizationRepositoryTest {
     TestEntityManager testEntityManager;
 
     @Test
-    void should_add_an_organization(){
+    void should_add_an_organization() {
         //given
         OrganizationEntity test_organization1 = new OrganizationEntity("Test organization1", "Test Desc");
 
@@ -39,7 +39,7 @@ class OrganizationRepositoryTest {
     }
 
     @Test
-    void should_find_by_id_if_exists(){
+    void should_find_by_id_if_exists() {
         //given
         OrganizationEntity test_organization1 = new OrganizationEntity("Test organization1", "Test Desc");
         testEntityManager.persist(test_organization1);
@@ -52,7 +52,7 @@ class OrganizationRepositoryTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(FindByIdProvider.class)
+    @ArgumentsSource(OrganizationFindByIdProvider.class)
     void find_by_id_test(List<OrganizationEntity> source, String find, Optional<OrganizationEntity> expected) {
         //given
         source.forEach(testEntityManager::persist);
@@ -65,11 +65,11 @@ class OrganizationRepositoryTest {
     @Test
     void should_throw_an_exception_if_no_organization_found() {
         //when + then
-        assertThrows(NoSuchElementException.class, ()-> organizationRepository.findById("Test organization").orElseThrow());
+        assertThrows(NoSuchElementException.class, () -> organizationRepository.findById("Test organization").orElseThrow());
     }
 
     @Test
-    void should_retun_an_empty_list_if_no_organizations_yet(){
+    void should_retun_an_empty_list_if_no_organizations_yet() {
         //when
         List<OrganizationEntity> result = organizationRepository.findAll();
 
@@ -107,7 +107,7 @@ class OrganizationRepositoryTest {
 
     @ParameterizedTest
     @ArgumentsSource(OrganizationsProvider.class)
-    void should_find_all_organizations_sorted_by_name_ASC(List<OrganizationEntity> input, List<OrganizationEntity> asc){
+    void should_find_all_organizations_sorted_by_name_ASC(List<OrganizationEntity> input, List<OrganizationEntity> asc) {
         //given
         input.forEach(testEntityManager::persist);
 
