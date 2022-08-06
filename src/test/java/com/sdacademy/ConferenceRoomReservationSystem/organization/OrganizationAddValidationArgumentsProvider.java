@@ -12,10 +12,12 @@ public class OrganizationAddValidationArgumentsProvider implements ArgumentsProv
         return Stream.of(
                 Arguments.of(
                         new OrganizationEntity("N", "Some desc"),
+                        "$.name",
                         "size must be between 2 and 20"
                 ),
                 Arguments.of(
                         new OrganizationEntity("New organization organization", "Some desc"),
+                        "$.name",
                         "size must be between 2 and 20"
                 )
         );

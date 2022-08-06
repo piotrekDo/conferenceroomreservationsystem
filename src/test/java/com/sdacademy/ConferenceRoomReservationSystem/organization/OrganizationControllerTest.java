@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,13 +14,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.NoSuchElementException;
 
 import static org.hamcrest.Matchers.equalTo;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(OrganizationController.class)
@@ -116,14 +112,14 @@ class OrganizationControllerTest {
 
     @ParameterizedTest
     @ArgumentsSource(OrganizationAddValidationArgumentsProvider.class)
-    void add_should_return_bad_request_if_violating_validation_rules(OrganizationEntity organization, String expected) throws Exception {
+    void add_should_return_bad_request_if_violating_validation_rules(OrganizationEntity organization, String field, String expected) throws Exception {
         //when
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/organizations").contentType(MediaType.APPLICATION_JSON)
                 .content(String.format("{\"name\": \"%s\",\"description\": \"%s\"}", organization.getName(), organization.getDescription())));
         //then
         Mockito.verify(organizationService, Mockito.never()).addOrganization(Mockito.any());
         perform.andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", equalTo(expected)));
+                .andExpect(MockMvcResultMatchers.jsonPath(field, equalTo(expected)));
 
     }
 
