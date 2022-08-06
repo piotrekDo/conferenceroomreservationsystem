@@ -1,22 +1,24 @@
-package com.sdacademy.ConferenceRoomReservationSystem.organization;
+package pl.sdacademy.ConferenceRoomReservationSystem.organization.args;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.springframework.data.domain.Sort;
+import pl.sdacademy.ConferenceRoomReservationSystem.SortType;
 
 import java.util.stream.Stream;
 
-public class OrganizationAddValidationArgumentsProvider implements ArgumentsProvider {
+public class SortOrganizationArgumentProvider implements ArgumentsProvider {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
         return Stream.of(
                 Arguments.of(
-                        new OrganizationEntity("N", "Some desc"),
-                        "size must be between 2 and 20"
+                        SortType.ASC,
+                        Sort.by(Sort.Direction.ASC, "name")
                 ),
                 Arguments.of(
-                        new OrganizationEntity("New organization organization", "Some desc"),
-                        "size must be between 2 and 20"
+                        SortType.DESC,
+                        Sort.by(Sort.Direction.DESC, "name")
                 )
         );
     }

@@ -1,4 +1,4 @@
-package com.sdacademy.ConferenceRoomReservationSystem;
+package pl.sdacademy.ConferenceRoomReservationSystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
