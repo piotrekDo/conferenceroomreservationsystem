@@ -1,5 +1,6 @@
 package com.sdacademy.ConferenceRoomReservationSystem.organization;
 
+import com.sdacademy.ConferenceRoomReservationSystem.error.ErrorEntity;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,10 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RestController
 @RequestMapping("/organizations")
@@ -50,24 +48,34 @@ public class OrganizationController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<Object> handleValidationExceptions(
+    ResponseEntity<ErrorEntity<Map<String, List<String>>>> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+        Map<String, List<String>> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
+            List<String> params = errors.getOrDefault(fieldName, new ArrayList<>());
+            params.add(errorMessage);
+            errors.put(fieldName, params);
         });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorEntity<>(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                errors
+        ), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = NoSuchElementException.class)
-    ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    ResponseEntity<ErrorEntity<String>> handleNoSuchElementException(NoSuchElementException e) {
+        return new ResponseEntity<>(new ErrorEntity<>(HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                e.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)
-    ResponseEntity<Object> handleNoSuchElementException(IllegalArgumentException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    ResponseEntity<ErrorEntity<String>> handleIllegalArgumentException(IllegalArgumentException e) {
+        return new ResponseEntity<>(new ErrorEntity<>(HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

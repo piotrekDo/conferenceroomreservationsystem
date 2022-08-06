@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -60,7 +61,9 @@ class OrganizationControllerTest {
         //then
         Mockito.verify(organizationService).getOrganizationByName(name);
         perform.andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", equalTo(String.format("No organization '%s' found!", name))));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", equalTo(404)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", equalTo("Not Found")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.details", equalTo("No organization 'Test' found!")));
     }
 
     @Test
@@ -106,21 +109,24 @@ class OrganizationControllerTest {
         //then
         Mockito.verify(organizationService).addOrganization(organization);
         perform.andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", equalTo(String.format("Organization with name '%s' exists!", organization.getName()))));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", equalTo(400)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", equalTo("Bad Request")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.details", equalTo("Organization with name 'New organization' exists!")));
 
     }
 
     @ParameterizedTest
     @ArgumentsSource(OrganizationAddValidationArgumentsProvider.class)
-    void add_should_return_bad_request_if_violating_validation_rules(OrganizationEntity organization, String field, String expected) throws Exception {
+    void add_should_return_bad_request_if_violating_validation_rules(OrganizationEntity organization, int code, String msg, List<String> details) throws Exception {
         //when
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/organizations").contentType(MediaType.APPLICATION_JSON)
                 .content(String.format("{\"name\": \"%s\",\"description\": \"%s\"}", organization.getName(), organization.getDescription())));
         //then
         Mockito.verify(organizationService, Mockito.never()).addOrganization(Mockito.any());
         perform.andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath(field, equalTo(expected)));
-
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", equalTo(code)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", equalTo(msg)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.details.name", equalTo(details)));
     }
 
     @Test
@@ -169,7 +175,9 @@ class OrganizationControllerTest {
         //then
         Mockito.verify(organizationService).updateOrganization(name, update);
         perform.andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", equalTo(String.format("No organization '%s' found!", name))));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", equalTo(404)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", equalTo("Not Found")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.details", equalTo("No organization 'Non exisiting' found!")));
     }
 
     @Test
@@ -192,14 +200,16 @@ class OrganizationControllerTest {
         //then
         Mockito.verify(organizationService).updateOrganization(name, update);
         perform.andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", equalTo((String.format("Organization with name %s already exists", update.getName())))));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", equalTo(400)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", equalTo("Bad Request")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.details", equalTo("Organization with name Existing already exists")));
     }
 
     @Test
     void delete_should_return_code_200_and_return_response_body() throws Exception {
         //given
         String name = "Test";
-        OrganizationEntity entity = new OrganizationEntity(23L,"Test", "some desc");
+        OrganizationEntity entity = new OrganizationEntity(23L, "Test", "some desc");
         Mockito.when(organizationService.deleteOrganization(name)).thenReturn(entity);
 
         //when
@@ -214,10 +224,10 @@ class OrganizationControllerTest {
     }
 
     @Test
-    void delete_should_return_not_found_if_no_reservation_exists_by_name(){
+    void delete_should_return_not_found_if_no_reservation_exists_by_name() {
         //given
         String name = "Test";
-        OrganizationEntity entity = new OrganizationEntity(23L,"Test", "some desc");
+        OrganizationEntity entity = new OrganizationEntity(23L, "Test", "some desc");
         Mockito.when(organizationService.deleteOrganization(name)).thenThrow(new NoSuchElementException(String.format("No organization '%s' found!", name)));
 
     }
