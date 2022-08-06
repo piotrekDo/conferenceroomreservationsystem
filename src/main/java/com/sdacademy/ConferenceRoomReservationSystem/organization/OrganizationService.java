@@ -40,11 +40,14 @@ public class OrganizationService {
     OrganizationEntity updateOrganization(String name, OrganizationEntity organization) {
         OrganizationEntity organizationToUpdate = organizationRepository
                 .findByName(name)
-                .orElseThrow(() -> new NoSuchElementException(""));
+                .orElseThrow(() -> new NoSuchElementException(String.format("No organization '%s' found!", name)));
         if (organization.getDescription() != null) {
             organizationToUpdate.setDescription(organization.getDescription());
         }
         if (organization.getName() != null && !organization.getName().equals(organizationToUpdate.getName())) {
+            organizationRepository.findByName(organization.getName()).ifPresent(n-> {
+                throw new IllegalArgumentException(String.format("Organization with name %s already exists", organization.getName()));
+            });
             organizationToUpdate.setName(organization.getName());
         }
         return organizationRepository.save(organizationToUpdate);

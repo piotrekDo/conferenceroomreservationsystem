@@ -185,4 +185,23 @@ class OrganizationServiceTest {
         Mockito.verify(organizationRepository).save(foundById);
     }
 
+    @Test
+    void when_update_organization_name_with_existing_name_exception_sshould_be_thrown(){
+        //given
+        String name1 = "Intive";
+        OrganizationEntity existingOrg1 = new OrganizationEntity(name1, "Delivery company");
+        String name2 = "Tieto";
+        OrganizationEntity existingOrg2 = new OrganizationEntity(name2, "IT company");
+        OrganizationEntity updateOrganization = new OrganizationEntity(name2, "Delivery company");
+        Mockito.when(organizationRepository.findByName(name1)).thenReturn(Optional.of(existingOrg1));
+        Mockito.when(organizationRepository.findByName(name2)).thenReturn(Optional.of(existingOrg2));
+
+        //when
+        //then
+        assertThrows(IllegalArgumentException.class, () -> {
+            organizationService.updateOrganization(name1, updateOrganization);
+        });
+        Mockito.verify(organizationRepository, Mockito.never()).save(updateOrganization);
+    }
+
 }
