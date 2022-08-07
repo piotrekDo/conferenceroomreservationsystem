@@ -1,7 +1,11 @@
 package pl.sdacademy.ConferenceRoomReservationSystem.conference_room;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pl.sdacademy.ConferenceRoomReservationSystem.SortType;
 import pl.sdacademy.ConferenceRoomReservationSystem.organization.Organization;
 import pl.sdacademy.ConferenceRoomReservationSystem.organization.OrganizationRepository;
 
@@ -28,8 +32,19 @@ class ConferenceRoomService {
         this.conferenceRoomTransformer = conferenceRoomTransformer;
     }
 
-    List<ConferenceRoomDto> getAllConferenceRooms() {
-        return conferenceRoomRepository.findAll().stream()
+    List<ConferenceRoomDto> getAllConferenceRooms(
+            String identifier,
+            String organizationName,
+            Boolean availablity,
+            Integer seats,
+            SortType sortType)
+    {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortType.name()), "name");
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
+        Example<ConferenceRoom> roomExample = Example.of(
+                new ConferenceRoom(null, identifier, null, availablity, seats, new Organization(organizationName)), matcher);
+
+        return conferenceRoomRepository.findAll(roomExample, sort).stream()
                 .map(conferenceRoomTransformer::toDto)
                 .collect(Collectors.toList());
     }
@@ -37,9 +52,9 @@ class ConferenceRoomService {
     ConferenceRoomDto addConferenceRoom(ConferenceRoomDto conferenceRoomDto) {
         ConferenceRoom conferenceRoom = conferenceRoomTransformer.fromDto(conferenceRoomDto);
         Organization organizationFromRepo = organizationRepository.findByName(conferenceRoom.getOrganization().getName())
-                        .orElseThrow(()->{
-                            throw new NoSuchElementException();
-                        });
+                .orElseThrow(() -> {
+                    throw new NoSuchElementException();
+                });
         conferenceRoom.setOrganization(organizationFromRepo);
         conferenceRoomRepository.findByNameAndOrganization_Name(conferenceRoom.getName(),
                         conferenceRoom.getOrganization().getName())

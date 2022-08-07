@@ -2,6 +2,7 @@ package pl.sdacademy.ConferenceRoomReservationSystem.conference_room;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import pl.sdacademy.ConferenceRoomReservationSystem.SortType;
 
 import java.util.List;
 
@@ -16,8 +17,16 @@ class ConferenceRoomController {
     }
 
     @GetMapping
-    List<ConferenceRoomDto> getAll() {
-        return conferenceRoomService.getAllConferenceRooms();
+    List<ConferenceRoomDto> getAll(
+            @RequestParam(required = false) String identifier,
+            @RequestParam(required = false) String organizationName,
+            @RequestParam(required = false) Boolean availablity,
+            @RequestParam(required = false) Integer seats,
+            @RequestParam(defaultValue = "ASC") SortType sortType
+
+    ) {
+        return conferenceRoomService.getAllConferenceRooms(identifier, organizationName, availablity, seats
+        ,sortType);
     }
 
     @PostMapping
