@@ -3,9 +3,10 @@ package pl.sdacademy.ConferenceRoomReservationSystem.reservation;
 import org.hibernate.annotations.GenericGenerator;
 import pl.sdacademy.ConferenceRoomReservationSystem.conference_room.ConferenceRoom;
 
-import javax.persistence.*;
-import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
