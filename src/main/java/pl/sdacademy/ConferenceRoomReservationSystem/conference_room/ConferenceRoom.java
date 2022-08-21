@@ -31,6 +31,10 @@ public class ConferenceRoom {
     public ConferenceRoom() {
     }
 
+    public ConferenceRoom(String id) {
+        this.id = id;
+    }
+
     public ConferenceRoom(String name, String identifier, Integer level, Boolean isAvailable, Integer numberOfSeats, Organization organization) {
         this.name = name;
         this.identifier = identifier;

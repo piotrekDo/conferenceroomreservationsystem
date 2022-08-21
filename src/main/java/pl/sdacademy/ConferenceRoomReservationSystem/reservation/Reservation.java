@@ -18,11 +18,7 @@ public class Reservation {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private String id;
-    @NotNull(groups = Add.class)
-    @FutureOrPresent(groups = {Add.class, Update.class})
     private LocalDateTime reservationStart;
-    @NotNull(groups = Add.class)
-    @FutureOrPresent(groups = {Add.class, Update.class})
     private LocalDateTime reservationEnd;
     private String reservationName;
     @ManyToOne
@@ -108,8 +104,3 @@ public class Reservation {
     }
 }
 
-interface Add {
-}
-
-interface Update {
-}
