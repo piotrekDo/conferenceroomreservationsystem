@@ -1,6 +1,7 @@
 package pl.sdacademy.ConferenceRoomReservationSystem.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -16,16 +17,26 @@ import java.time.LocalDateTime;
 @Component
 public class Initializer implements ApplicationRunner {
 
-    @Autowired
     private OrganizationRepository organizationRepository;
-    @Autowired
     private ConferenceRoomRepository conferenceRoomRepository;
-
-    @Autowired
     private ReservationRepository reservationRepository;
+    private final Boolean loadData;
+
+    public Initializer(OrganizationRepository organizationRepository,
+                       ConferenceRoomRepository conferenceRoomRepository,
+                       ReservationRepository reservationRepository,
+                       @Value("${init.load-data}") Boolean loadData) {
+        this.organizationRepository = organizationRepository;
+        this.conferenceRoomRepository = conferenceRoomRepository;
+        this.reservationRepository = reservationRepository;
+        this.loadData = loadData;
+    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        if (!loadData) {
+            return;
+        }
         Organization organization1 = new Organization("Organization1", "some desc");
         Organization organization2 = new Organization("Organization2", "some desc");
         Organization organization3 = new Organization("Organization3", "some desc");
