@@ -1,4 +1,4 @@
-package com.sdacademy.ConferenceRoomReservationSystem;
+package pl.sdacademy.ConferenceRoomReservationSystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
